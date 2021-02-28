@@ -16,6 +16,7 @@ queue_t *q_new()
     if (NULL == q)
         return NULL;
     q->head = NULL;
+    q->tail = NULL;
     q->size = 0;
     return q;
 }
@@ -55,6 +56,7 @@ bool q_insert_head(queue_t *q, char *s)
     newh = malloc(sizeof(list_ele_t));
     if (NULL == newh)
         goto fail_head;
+    newh->next = NULL;
 
     newh->value = (char *) malloc(sizeof(char) * (len + 1));
     if (NULL == newh->value)
@@ -65,6 +67,8 @@ bool q_insert_head(queue_t *q, char *s)
 
     newh->next = q->head;
     q->head = newh;
+    if (NULL == q->tail)
+        q->tail = newh;
     q->size++;
     return true;
 
@@ -86,6 +90,34 @@ bool q_insert_tail(queue_t *q, char *s)
     /* TODO: You need to write the complete code for this function */
     /* Remember: It should operate in O(1) time */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (NULL == q)
+        return false;
+
+    int len = strlen(s);
+    list_ele_t *node = malloc(sizeof(list_ele_t));
+    if (NULL == node)
+        goto fail_head;
+    node->next = NULL;
+
+    node->value = malloc(sizeof(char) * (len + 1));
+    if (NULL == node->value)
+        goto fail_value;
+
+    memcpy(node->value, s, len);
+    node->value[len] = '\0';
+
+    if (q->tail)
+        q->tail->next = node;
+
+    q->tail = node;
+    if (NULL == q->head)
+        q->head = node;
+    q->size++;
+    return true;
+
+fail_value:
+    free(node);
+fail_head:
     return false;
 }
 
@@ -110,6 +142,8 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
         memcpy(sp, node->value, cpylen);
         sp[cpylen] = '\0';
     }
+    if (node == q->tail)
+        q->tail = NULL;
     q->head = q->head->next;
     free(node->value);
     free(node);
