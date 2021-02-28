@@ -16,6 +16,7 @@ queue_t *q_new()
     if (NULL == q)
         return NULL;
     q->head = NULL;
+    q->size = 0;
     return q;
 }
 
