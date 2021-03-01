@@ -199,6 +199,53 @@ void q_reverse(queue_t *q)
     q->tail = tmp;
 }
 
+void list_add(list_ele_t **list, list_ele_t *node)
+{
+    node->next = *list;
+    *list = node;
+}
+
+void list_concat(list_ele_t **left, list_ele_t *right)
+{
+    while (*left) {
+        left = &((*left)->next);
+    }
+    *left = right;
+}
+
+void quick_sort(list_ele_t **list)
+{
+    if (NULL == list || NULL == *list)
+        return;
+    list_ele_t *pivot;
+    list_ele_t *left = NULL, *right = NULL;
+    list_ele_t *ptr;
+
+    pivot = *list;
+    ptr = pivot->next;
+    pivot->next = NULL;
+
+    while (ptr) {
+        list_ele_t *node = ptr;
+        ptr = ptr->next;
+        if (strcmp(pivot->value, node->value) <= 0) {
+            list_add(&right, node);
+        } else {
+            list_add(&left, node);
+        }
+    }
+
+    if (!left || !right)
+        printf("L %p R %p\n", left, right);
+    quick_sort(&left);
+    quick_sort(&right);
+
+    *list = NULL;
+    list_concat(list, left);
+    list_concat(list, pivot);
+    list_concat(list, right);
+}
+
 /*
  * Sort elements of queue in ascending order
  * No effect if q is NULL or empty. In addition, if q has only one
@@ -208,4 +255,14 @@ void q_sort(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (NULL == q || q->size <= 1)
+        return;
+
+    list_ele_t *cur;
+    quick_sort(&(q->head));
+    cur = q->head;
+    while (cur->next) {
+        cur = cur->next;
+    }
+    q->tail = cur;
 }
