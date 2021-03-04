@@ -12,7 +12,6 @@
 queue_t *q_new()
 {
     queue_t *q = malloc(sizeof(queue_t));
-    /* TODO: What if malloc returned NULL? */
     if (NULL == q)
         return NULL;
     q->head = NULL;
@@ -24,8 +23,6 @@ queue_t *q_new()
 /* Free all storage used by queue */
 void q_free(queue_t *q)
 {
-    /* TODO: How about freeing the list elements and the strings? */
-    /* Free queue structure */
     list_ele_t *cur, *next;
     if (q) {
         cur = q->head;
@@ -87,9 +84,6 @@ fail_head:
  */
 bool q_insert_tail(queue_t *q, char *s)
 {
-    /* TODO: You need to write the complete code for this function */
-    /* Remember: It should operate in O(1) time */
-    /* TODO: Remove the above comment when you are about to implement. */
     if (NULL == q)
         return false;
 
@@ -158,9 +152,6 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
  */
 int q_size(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* Remember: It should operate in O(1) time */
-    /* TODO: Remove the above comment when you are about to implement. */
     if (NULL == q)
         return 0;
     else
@@ -235,8 +226,6 @@ void quick_sort(list_ele_t **list)
         }
     }
 
-    if (!left || !right)
-        printf("L %p R %p\n", left, right);
     quick_sort(&left);
     quick_sort(&right);
 
@@ -253,8 +242,6 @@ void quick_sort(list_ele_t **list)
  */
 void q_sort(queue_t *q)
 {
-    /* TODO: You need to write the code for this function */
-    /* TODO: Remove the above comment when you are about to implement. */
     if (NULL == q || q->size <= 1)
         return;
 
